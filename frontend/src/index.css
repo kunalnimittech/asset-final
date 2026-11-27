@@ -87,7 +87,7 @@
   --hline: var(--line);
   --hline-dashed: repeating-linear-gradient(90deg, var(--dash) 0 5px, transparent 5px 9px);
 
-  --sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --sans: "Poppins", system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "SF Mono", Consolas, monospace;
 
   font: 16px/1.5 var(--sans);
@@ -313,7 +313,7 @@ p {
   max-width: 980px;
   font-size: clamp(40px, 5.4vw, 88px);
   line-height: 1.02;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.04em;
   color: var(--ink);
   text-wrap: balance;
@@ -328,7 +328,7 @@ p {
   max-width: 760px;
   font-size: clamp(26px, 2.7vw, 44px);
   line-height: 1.12;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--ink);
   text-wrap: balance;
@@ -586,4 +586,10 @@ p {
   .brand span {
     display: none;
   }
+}
+
+/* The illustrations (kit Stages) use the app font too. The kit's own tokens
+   live in a CSS layer, so this plain rule wins. */
+.ss-stage {
+  --ss-font: var(--sans);
 }
