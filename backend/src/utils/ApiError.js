@@ -7,6 +7,8 @@ export class ApiError extends Error {
   }
 
   static badRequest(msg = "Bad request", details) { return new ApiError(400, msg, details); }
+  static unauthorized(msg = "Not signed in") { return new ApiError(401, msg); }
+  static forbidden(msg = "You don't have permission to do this") { return new ApiError(403, msg); }
   static notFound(msg = "Not found") { return new ApiError(404, msg); }
   static conflict(msg = "Conflict") { return new ApiError(409, msg); }
 }

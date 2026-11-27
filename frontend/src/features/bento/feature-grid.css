@@ -1,0 +1,652 @@
+/* NimitTech Assets — the features bento. One frame, dashed rules between the
+   cells, no gaps. The rules are each cell's own dashed top and left border;
+   the frame clips the outermost ones so the page's own dividers form the edge.
+   Each picture is its own Stage at 1:1, pinned to its cell's bottom. */
+.feature-grid {
+  --pad: 28px;
+  --cell: var(--surface);
+  --rule: var(--dash);
+  --panel: var(--raised);
+  container-type: inline-size;
+  -webkit-font-smoothing: antialiased;
+
+  /* Holds the row heights, shared by the grid and the full-bleed row lines.
+     (A container query can't style the container, so they live one level in.) */
+  & .fg-body {
+    position: relative;
+    --r1: 400px; --r2: 330px; --r3: 320px; --r4: 340px; --r5: 230px;
+  }
+
+  & .fg-frame {
+    overflow: hidden;
+  }
+
+  & .fg-grid {
+    display: grid;
+    margin: 0 0 0 -1px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: var(--r1) var(--r2) var(--r3) var(--r4) var(--r5);
+    grid-template-areas: "hero" "stat" "flow" "service" "kinds";
+  }
+
+  /* A tablet: the hero across, a pair, then two bands */
+  @container (min-width: 600px) {
+    & .fg-body {
+      --r1: 400px; --r2: 320px; --r3: 300px; --r4: 210px;
+    }
+    & .fg-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: var(--r1) var(--r2) var(--r3) var(--r4);
+      grid-template-areas: "hero hero" "stat flow" "service service" "kinds kinds";
+    }
+  }
+
+  /* Desktop: 2 + 1, then the mirror 1 + 2, then the full-width band */
+  @container (min-width: 900px) {
+    & .fg-body {
+      --r1: 400px; --r2: 320px; --r3: 200px;
+    }
+    & .fg-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: var(--r1) var(--r2) var(--r3);
+      grid-template-areas: "hero hero stat" "flow service service" "kinds kinds kinds";
+    }
+  }
+
+  /* Large monitors: a little more room per row */
+  @container (min-width: 1200px) {
+    & .fg-grid {
+      --pad: 36px;
+    }
+    & .fg-body {
+      --r1: 440px; --r2: 340px; --r3: 210px;
+    }
+  }
+
+  @container (max-width: 599px) {
+    & .fg-grid {
+      --pad: 24px;
+    }
+    & .fg-stat-number {
+      font-size: 150px;
+    }
+  }
+
+  /* ---- The cell: one frame for all five ---- */
+
+  & .fg-cell {
+    position: relative;
+    overflow: hidden;
+    background: var(--cell);
+    border-left: 1px dashed var(--rule);
+  }
+
+  & .fg-cell--hero { grid-area: hero; }
+  & .fg-cell--stat { grid-area: stat; }
+  & .fg-cell--flow { grid-area: flow; }
+  & .fg-cell--service { grid-area: service; }
+  & .fg-cell--kinds { grid-area: kinds; }
+
+  & .fg-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    margin: 0;
+    padding: 26px var(--pad) 0;
+    font-size: 17px;
+    line-height: 24px;
+    letter-spacing: -0.012em;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  & .fg-copy b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  & .fg-cell--hero .fg-copy,
+  & .fg-cell--service .fg-copy {
+    max-width: 480px;
+  }
+
+  & .fg-cell--kinds .fg-copy {
+    max-width: 760px;
+  }
+
+  /* ---- Pictures: pinned to the cell's bottom ---- */
+
+  & .fg-picture {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  & .fg-picture--kinds {
+    --half: min(50cqw, 900px);
+    left: 50%;
+    width: 1800px;
+    margin-left: -900px;
+    -webkit-mask-image: linear-gradient(90deg, transparent calc(50% - var(--half)), #000 calc(50% - var(--half) + 80px), #000 calc(50% + var(--half) - 80px), transparent calc(50% + var(--half)));
+    mask-image: linear-gradient(90deg, transparent calc(50% - var(--half)), #000 calc(50% - var(--half) + 80px), #000 calc(50% + var(--half) - 80px), transparent calc(50% + var(--half)));
+  }
+
+  & .fg-stage .ss-stage {
+    overflow: hidden;
+    background: transparent;
+  }
+
+  /* ---- Register (hero): the one window ---- */
+
+  & .fg-window {
+    position: absolute;
+    top: 14px;
+    left: var(--pad);
+    width: max(760px, calc(100% + 40px));
+    height: 330px;
+    --ss-canvas: var(--raised);
+    --ss-surface: var(--raised);
+    box-shadow: 0 0 0 1px var(--ring), var(--shadow-lg);
+  }
+
+  & .fg-window--compact {
+    left: 24px;
+    width: calc(100% + 24px);
+  }
+
+  & .fg-side {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 12px;
+  }
+
+  & .fg-nav {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    height: 30px;
+    padding: 0 8px;
+    border-radius: 7px;
+  }
+
+  & .fg-nav[data-active] {
+    background: var(--hover);
+  }
+
+  & .fg-tools {
+    display: flex;
+    gap: 6px;
+  }
+
+  & .fg-register {
+    padding: 4px 20px 0;
+  }
+
+  & .fg-window--compact .fg-register {
+    width: calc(100% - 48px);
+    padding: 4px 16px 0;
+  }
+
+  & .fg-reg-head,
+  & .fg-reg-row {
+    display: grid;
+    grid-template-columns: 200px 80px 104px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    padding: 0 12px;
+    margin: 0 -12px;
+  }
+
+  & .fg-window--compact .fg-reg-head,
+  & .fg-window--compact .fg-reg-row {
+    grid-template-columns: minmax(0, 1fr) 96px;
+  }
+
+  & .fg-window--compact .fg-reg-head > :nth-child(2),
+  & .fg-window--compact .fg-reg-row > :nth-child(2) {
+    display: none;
+  }
+
+  & .fg-reg-head {
+    height: 30px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-3);
+  }
+
+  & .fg-reg-row {
+    height: 46px;
+    border-radius: 10px;
+  }
+
+  & .fg-reg-row + .fg-reg-row {
+    box-shadow: inset 0 1px 0 var(--hairline);
+  }
+
+  & .fg-reg-row[data-real] {
+    background: var(--accent-wash);
+    box-shadow: none;
+  }
+
+  & .fg-reg-row[data-real] + .fg-reg-row {
+    box-shadow: none;
+  }
+
+  & .fg-reg-asset {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  & .fg-reg-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    background: var(--raised);
+    box-shadow: inset 0 0 0 1px var(--ring);
+    color: var(--ink);
+  }
+
+  & .fg-reg-name {
+    overflow: hidden;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  & .fg-reg-tag {
+    font: 500 12px/1 var(--ss-mono);
+    color: var(--ink-2);
+  }
+
+  & .fg-pill {
+    white-space: nowrap;
+  }
+
+  /* The status turns, then the holder arrives a beat later */
+  & .fg-reg-row .ss-states__item[data-on] {
+    transition-delay: 0.15s, 0.15s, 0.15s;
+  }
+
+  & .fg-reg-holder {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  & .fg-reg-holder:not(.fg-reg-holder--filler) {
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.35s ease 0.55s, transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) 0.55s;
+  }
+
+  & .fg-reg-holder[data-on] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---- Sheets (stat) ---- */
+
+  & .fg-stat {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 26px var(--pad) 30px;
+  }
+
+  & .fg-stat-lead {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    line-height: 24px;
+    letter-spacing: -0.012em;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  & .fg-stat-glyph {
+    color: var(--accent);
+  }
+
+  & .fg-stat-number {
+    display: block;
+    margin-top: auto;
+    font-size: 180px;
+    line-height: 0.86;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  & .fg-stat-label {
+    max-width: 250px;
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 21px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+
+  /* ---- Lifecycle (diagram) ---- */
+
+  & .fg-flow {
+    --step: 40px;
+    position: absolute;
+    top: 6px;
+    left: var(--pad);
+    right: var(--pad);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  & .fg-flow__rail {
+    position: absolute;
+    top: calc(var(--step) / 2);
+    left: 5px;
+    width: 0;
+    height: calc(var(--step) * 4);
+    border-left: 1px dashed var(--node);
+  }
+
+  & .fg-flow__fill {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    width: 2px;
+    height: calc(var(--step) * var(--live));
+    border-radius: 1px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.9s cubic-bezier(0.45, 0, 0.2, 1) 0.1s;
+  }
+
+  & .fg-flow[data-on] .fg-flow__fill {
+    transform: none;
+  }
+
+  & .fg-flow__step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: var(--step);
+  }
+
+  & .fg-flow__dot {
+    position: relative;
+    flex: none;
+    width: 11px;
+    height: 11px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1.5px var(--node);
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    transition-delay: calc(var(--i) * 0.3s + 0.1s);
+  }
+
+  & .fg-flow[data-on] .fg-flow__step[data-done] .fg-flow__dot {
+    background: var(--accent);
+    box-shadow: inset 0 0 0 1.5px var(--accent);
+  }
+
+  & .fg-flow[data-on] .fg-flow__step[data-live] .fg-flow__dot {
+    box-shadow: inset 0 0 0 1.5px var(--accent), 0 0 0 4px var(--accent-soft);
+  }
+
+  & .fg-flow__name {
+    width: 84px;
+    flex: none;
+    font-size: 14px;
+    color: var(--ink-3);
+    transition: color 0.25s ease;
+    transition-delay: calc(var(--i) * 0.3s + 0.1s);
+  }
+
+  & .fg-flow[data-on] .fg-flow__step[data-done] .fg-flow__name {
+    color: var(--ink-2);
+  }
+
+  & .fg-flow[data-on] .fg-flow__step[data-live] .fg-flow__name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  & .fg-flow__now {
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 11px;
+    background: var(--accent-soft);
+    font: 600 11px/22px var(--ss-font);
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s ease 0.9s;
+  }
+
+  & .fg-flow[data-on] .fg-flow__now {
+    opacity: 1;
+  }
+
+  /* ---- Service (component) ---- */
+
+  & .fg-service {
+    --label: 176px;
+    --gap: 14px;
+    position: absolute;
+    top: 6px;
+    left: var(--pad);
+    box-sizing: border-box;
+    width: calc(100% + 40px);
+    height: 250px;
+    padding: 18px 22px;
+    border-radius: 14px;
+    background: var(--panel);
+    box-shadow: 0 0 0 1px var(--ring), var(--shadow-lg);
+  }
+
+  & .fg-service[data-layout="compact"] {
+    --label: 128px;
+    --gap: 10px;
+    padding: 16px 18px;
+  }
+
+  & .fg-service__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: calc(var(--pad) + 40px);
+  }
+
+  & .fg-service__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  & .fg-service__axis {
+    display: grid;
+    grid-template-columns: repeat(var(--span), minmax(0, 1fr));
+    margin: 16px calc(var(--pad) + 40px) 6px calc(var(--label) + var(--gap));
+    font: 11px/14px var(--ss-mono);
+    color: var(--ink-3);
+  }
+
+  & .fg-service__rows {
+    position: relative;
+    margin-right: calc(var(--pad) + 40px);
+  }
+
+  & .fg-service__today {
+    position: absolute;
+    top: -6px;
+    bottom: -4px;
+    left: calc(var(--label) + var(--gap) + (100% - var(--label) - var(--gap)) * var(--at) / var(--span));
+    width: 0;
+    border-left: 1px dashed var(--accent);
+  }
+
+  & .fg-service__row {
+    display: grid;
+    grid-template-columns: var(--label) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--gap);
+    height: 34px;
+  }
+
+  & .fg-service__label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  & .fg-service__track {
+    position: relative;
+    height: 100%;
+    background-image: linear-gradient(90deg, var(--hairline) 1px, transparent 1px);
+    background-size: calc(100% / var(--span)) 100%;
+  }
+
+  & .fg-service__job {
+    position: absolute;
+    top: 9px;
+    left: calc(100% * var(--at) / var(--span));
+    width: calc(100% * var(--len) / var(--span));
+    height: 16px;
+    border-radius: 5px;
+    background: var(--track);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-delay: calc(var(--i) * 0.12s + 0.1s);
+  }
+
+  & .fg-service[data-on] .fg-service__job {
+    transform: none;
+  }
+
+  & .fg-service__row[data-real] .fg-service__job {
+    background: var(--warn);
+  }
+
+  & .fg-service__due {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + 8px);
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 6px;
+    background: var(--warn-soft);
+    font: 600 11px/20px var(--ss-font);
+    color: var(--warn-text);
+    white-space: nowrap;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease 0.9s;
+  }
+
+  /* Narrow: the tag sits before its bar so it never meets the crop */
+  & .fg-service[data-layout="compact"] .fg-service__due {
+    left: auto;
+    right: calc(100% + 8px);
+  }
+
+  & .fg-service[data-on] .fg-service__due {
+    opacity: 1;
+  }
+
+  /* ---- Kinds (collection) ---- */
+
+  & .fg-kinds {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 6px;
+  }
+
+  & .fg-kinds__row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    transform: translateX(var(--off));
+    will-change: transform;
+    transition: transform 2.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  & .fg-kinds[data-on] .fg-kinds__row {
+    transform: translateX(calc(var(--off) + var(--dir) * 56px));
+  }
+
+  & .fg-chip {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px 0 14px;
+    border-radius: 10px;
+    background: var(--wash);
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    font: 500 13px/1 var(--ss-font);
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  & .fg-chip svg {
+    color: var(--ink);
+  }
+}
+
+/* The grid's inner horizontal rules, one at each row edge. They stay inside
+   the box; only the section dividers above and below run out past it. */
+.feature-grid .fg-hlines {
+  position: absolute;
+  inset: 0;
+  /* Above the white cells, which are positioned and would cover the lines */
+  z-index: 2;
+  pointer-events: none;
+}
+
+.feature-grid .fg-hline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--hline-dashed);
+}
+
+.feature-grid .fg-hline:nth-child(1) { top: var(--r1); }
+.feature-grid .fg-hline:nth-child(2) { top: calc(var(--r1) + var(--r2)); }
+.feature-grid .fg-hline:nth-child(3) { top: calc(var(--r1) + var(--r2) + var(--r3)); }
+.feature-grid .fg-hline:nth-child(4) { top: calc(var(--r1) + var(--r2) + var(--r3) + var(--r4)); }
+
+/* Three columns: 3 rows, 2 inner lines. Two columns: 4 rows, 3 lines. */
+@container (min-width: 600px) {
+  .feature-grid .fg-hline:nth-child(4) { display: none; }
+}
+@container (min-width: 900px) {
+  .feature-grid .fg-hline:nth-child(3) { display: none; }
+}

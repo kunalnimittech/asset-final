@@ -1,18 +1,25 @@
+import { randomUUID } from "node:crypto";
+import { prisma } from "../../lib/prisma-client.js";
+import { auth } from "../../lib/auth.js";
 import { ApiError } from "../../utils/ApiError.js";
 import { ALL_ROLES, ROLES } from "../../constants/roles.js";
-import { users, newId } from "./user.store.js";
 
-export const findAll = () => users;
+// Never return session/account rows (they hold tokens and password hashes).
+const publicFields = {
+  id: true, name: true, email: true, emailVerified: true, image: true, role: true, createdAt: true, updatedAt: true,
+};
 
-export const findById = (id) => users.find((u) => u.id === id);
+const MIN_PASSWORD = 8;
 
-export function getById(id) {
-  const user = findById(id);
+export const findAll = () => prisma.user.findMany({ select: publicFields, orderBy: { createdAt: "asc" } });
+
+export async function getById(id) {
+  const user = await prisma.user.findUnique({ where: { id }, select: publicFields });
   if (!user) throw ApiError.notFound(`User ${id} not found`);
   return user;
 }
 
-function validate({ name, email, role }, { partial = false } = {}) {
+function validate({ name, email, role, password }, { partial = false } = {}) {
   const errors = [];
   if (!partial || name !== undefined) {
     if (typeof name !== "string" || !name.trim()) errors.push("name is required");
@@ -20,38 +27,61 @@ function validate({ name, email, role }, { partial = false } = {}) {
   if (!partial || email !== undefined) {
     if (typeof email !== "string" || !/^\S+@\S+\.\S+$/.test(email)) errors.push("valid email is required");
   }
+  if (!partial && (typeof password !== "string" || password.length < MIN_PASSWORD)) {
+    errors.push(`password must be at least ${MIN_PASSWORD} characters`);
+  }
   if (role !== undefined && !ALL_ROLES.includes(role)) {
     errors.push(`role must be one of: ${ALL_ROLES.join(", ")}`);
   }
   if (errors.length) throw ApiError.badRequest("Validation failed", errors);
 }
 
-function assertEmailFree(email, exceptId) {
-  if (users.some((u) => u.email === email && u.id !== exceptId)) {
-    throw ApiError.conflict("Email already in use");
-  }
+async function assertEmailFree(email, exceptId) {
+  const existing = await prisma.user.findUnique({ where: { email }, select: { id: true } });
+  if (existing && existing.id !== exceptId) throw ApiError.conflict("Email already in use");
 }
 
-export function create(data = {}) {
+// Creates a user who can sign in with email + password (same format better-auth uses).
+export async function create(data = {}) {
   validate(data);
-  assertEmailFree(data.email);
-  const user = { id: newId(), name: data.name.trim(), email: data.email, role: data.role ?? ROLES.USER };
-  users.push(user);
-  return user;
+  const email = data.email.toLowerCase();
+  await assertEmailFree(email);
+
+  const ctx = await auth.$context;
+  const hash = await ctx.password.hash(data.password);
+  const id = randomUUID();
+
+  return prisma.user.create({
+    data: {
+      id,
+      name: data.name.trim(),
+      email,
+      role: data.role ?? ROLES.USER,
+      accounts: { create: { id: randomUUID(), accountId: id, providerId: "credential", password: hash } },
+    },
+    select: publicFields,
+  });
 }
 
-export function update(id, data = {}) {
-  const user = getById(id);
+export async function update(id, data = {}) {
+  await getById(id);
   validate(data, { partial: true });
-  if (data.email) assertEmailFree(data.email, id);
-  if (data.name !== undefined) user.name = data.name.trim();
-  if (data.email !== undefined) user.email = data.email;
-  if (data.role !== undefined) user.role = data.role;
-  return user;
+  const email = data.email?.toLowerCase();
+  if (email) await assertEmailFree(email, id);
+
+  return prisma.user.update({
+    where: { id },
+    data: {
+      ...(data.name !== undefined && { name: data.name.trim() }),
+      ...(email !== undefined && { email }),
+      ...(data.role !== undefined && { role: data.role }),
+    },
+    select: publicFields,
+  });
 }
 
-export function remove(id) {
-  const index = users.findIndex((u) => u.id === id);
-  if (index === -1) throw ApiError.notFound(`User ${id} not found`);
-  users.splice(index, 1);
+export async function remove(id, currentUserId) {
+  if (id === currentUserId) throw ApiError.badRequest("You can't delete your own account");
+  await getById(id);
+  await prisma.user.delete({ where: { id } }); // sessions/accounts cascade
 }

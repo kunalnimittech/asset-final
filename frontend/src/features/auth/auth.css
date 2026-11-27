@@ -1,0 +1,294 @@
+/* Sign in / sign up: two equal halves split by one dashed rule. */
+.au {
+  --rule: var(--dash);
+  /* The one inverted tile: near-black on light, accent blue on dark */
+  --statement-bg: #0b0d12;
+  --statement-accent: #6f97ff;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  flex: 1;
+  /* Fill the screen between header (64) and footer (61) */
+  min-height: max(640px, calc(100svh - 125px));
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 900px) {
+  .au {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .au-aside {
+    display: none;
+  }
+}
+
+/* ---- The form half ---- */
+
+.au-main {
+  display: grid;
+  place-items: center;
+  padding: clamp(40px, 5vw, 72px) var(--gutter, 24px);
+}
+
+.au-form-wrap {
+  width: 100%;
+  max-width: 400px;
+}
+
+.au-title {
+  margin: 0 0 8px;
+  font-size: clamp(26px, 2.2vw, 34px);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.au-sub {
+  margin: 0 0 28px;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--ink-2);
+}
+
+.au-switch {
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px dashed var(--rule);
+  font-size: 14px;
+  color: var(--ink-2);
+  text-align: center;
+}
+
+.au-switch a {
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+.au-switch a:hover {
+  text-decoration: underline;
+}
+
+/* ---- The aside half: a 2 × 2 ruled bento ---- */
+
+.au-aside {
+  position: relative;
+  border-left: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.au-frame {
+  height: 100%;
+  overflow: hidden;
+}
+
+.au-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  height: 100%;
+  margin: 0 0 0 -1px;
+}
+
+.au-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  overflow: hidden;
+  padding: clamp(20px, 2vw, 32px);
+  border-left: 1px dashed var(--rule);
+  background: var(--surface);
+}
+
+.au-copy {
+  margin: 0;
+  font-size: 15px;
+  line-height: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.au-copy b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Tag (object): a printed label, slightly turned, cropped by the cell's foot */
+.au-tag {
+  align-self: center;
+  width: 156px;
+  margin-top: auto;
+  margin-bottom: -14px;
+  padding: 14px 14px 12px;
+  border-radius: 12px;
+  /* A printed label: white with dark ink in both themes */
+  --ink: #0b0d12;
+  --ink-3: #9aa0ab;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--ring), var(--shadow-lg);
+  transform: rotate(-4deg);
+}
+
+.au-tag__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.au-tag__brand {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.au-tag__kind {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.au-tag__qr {
+  display: block;
+  width: 100%;
+  fill: var(--ink);
+}
+
+.au-tag__id {
+  display: block;
+  margin-top: 10px;
+  font: 600 13px/1 ui-monospace, Consolas, monospace;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-align: center;
+}
+
+/* Statement */
+.au-cell--statement {
+  justify-content: flex-end;
+  background: var(--statement-bg);
+}
+
+.au-statement {
+  margin: 0;
+  font-size: clamp(32px, 3vw, 52px);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  color: #fff;
+}
+
+.au-statement span {
+  color: var(--statement-accent);
+}
+
+/* Stat */
+.au-stat-lead {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.au-stat-number {
+  margin-top: auto;
+  font-size: clamp(110px, 10vw, 180px);
+  line-height: 0.9;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  color: var(--ink);
+}
+
+.au-stat-label {
+  max-width: 220px;
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink-2);
+}
+
+/* Activity log (component), bleeding off the right and bottom */
+.au-log {
+  margin: auto -64px -24px 0;
+  padding: 8px 10px;
+  border-radius: 12px 0 0 0;
+  background: var(--raised);
+  box-shadow: 0 0 0 1px var(--ring), var(--shadow-lg);
+}
+
+.au-log__row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 8px;
+  border-radius: 8px;
+}
+
+.au-log__row + .au-log__row {
+  box-shadow: inset 0 1px 0 var(--hairline);
+}
+
+.au-log__row[data-real] {
+  background: var(--accent-wash);
+}
+
+.au-log__row[data-real] + .au-log__row {
+  box-shadow: none;
+}
+
+.au-log__dot {
+  justify-self: center;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.au-log__text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  font-size: 12.5px;
+  line-height: 1.2;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.au-log__text b {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.au-log__row[data-real] .au-log__text {
+  gap: 2px;
+}
+
+.au-log__time {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* The panel's middle rule, inside the panel */
+.au-aside::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--hline-dashed);
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .au {
+  --statement-bg: var(--accent);
+  --statement-accent: #cddbff;
+}

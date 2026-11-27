@@ -1,128 +1,615 @@
+/* NimitTech Assets — page shell. One centred column framed by solid lines;
+   section dividers are solid lines that run out past the column. Inside the
+   bento, cells are split by dashed lines. Two themes: light and dark,
+   chosen by data-theme on <html> (see src/lib/theme.js). */
+:root,
+:root[data-theme="light"] {
+  --ink: #0b0d12;
+  --ink-2: #5b6170;
+  --ink-3: #9aa0ab;
+  --page: #f4f5f7;
+  --surface: #fff;
+  --surface-2: #fafbfc;
+  --raised: #fff;
+  --wash: #f5f6f8;
+  --hover: #f1f2f5;
+  --line: #e3e6eb;
+  --dash: #c4cad4;
+  --hatch: #e6e8ec;
+  --accent: #1f5eff;
+  --accent-hover: #1a4fd9;
+  --accent-soft: rgba(31, 94, 255, 0.1);
+  --accent-wash: #f3f6ff;
+  --accent-text: #1f5eff;
+  --danger: #c0262d;
+  --danger-soft: rgba(192, 38, 45, 0.07);
+  --warn: #d97706;
+  --warn-soft: rgba(217, 119, 6, 0.12);
+  --warn-text: #b45309;
+  --ring: rgba(11, 13, 18, 0.12);
+  --ring-strong: rgba(11, 13, 18, 0.16);
+  --hairline: rgba(11, 13, 18, 0.06);
+  --shadow-sm: 0 1px 2px rgba(11, 13, 18, 0.05);
+  --shadow-lg: 0 18px 40px -16px rgba(20, 30, 70, 0.22), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --track: #dfe3ea;
+  --node: #c3c9d4;
+  /* Placeholder ink for kit Bars/Avatars drawn outside a Stage */
+  --ss-ink-1: rgba(0, 0, 0, 0.04);
+  --ss-ink-2: rgba(0, 0, 0, 0.06);
+  --ss-ink-3: rgba(0, 0, 0, 0.08);
+  --ss-ink-4: rgba(0, 0, 0, 0.1);
+  --ss-ink-5: rgba(0, 0, 0, 0.15);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --ink: #f2f4f7;
+  --ink-2: #a1a7b3;
+  --ink-3: #6b7280;
+  --page: #050608;
+  --surface: #0b0c0f;
+  --surface-2: #0e1014;
+  --raised: #15171c;
+  --wash: #15171c;
+  --hover: #1a1d23;
+  --line: #22252c;
+  --dash: #343842;
+  --hatch: #1c1f25;
+  --accent: #3d74ff;
+  --accent-hover: #5a89ff;
+  --accent-soft: rgba(61, 116, 255, 0.18);
+  --accent-wash: rgba(61, 116, 255, 0.12);
+  --accent-text: #8fb0ff;
+  --danger: #ff6b6b;
+  --danger-soft: rgba(255, 107, 107, 0.1);
+  --warn: #f59e0b;
+  --warn-soft: rgba(245, 158, 11, 0.16);
+  --warn-text: #fbbf24;
+  --ring: rgba(255, 255, 255, 0.1);
+  --ring-strong: rgba(255, 255, 255, 0.14);
+  --hairline: rgba(255, 255, 255, 0.06);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 18px 40px -16px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --track: #2a2e36;
+  --node: #3a3f49;
+  --ss-ink-1: rgba(255, 255, 255, 0.05);
+  --ss-ink-2: rgba(255, 255, 255, 0.07);
+  --ss-ink-3: rgba(255, 255, 255, 0.1);
+  --ss-ink-4: rgba(255, 255, 255, 0.13);
+  --ss-ink-5: rgba(255, 255, 255, 0.2);
+  color-scheme: dark;
+}
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  /* Side padding that grows with the screen */
+  --gutter: clamp(16px, 2.6vw, 44px);
+  /* Frame lines are solid; lines inside a bento are dashed */
+  --hline: var(--line);
+  --hline-dashed: repeating-linear-gradient(90deg, var(--dash) 0 5px, transparent 5px 9px);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  font: 16px/1.5 var(--sans);
+  color: var(--ink-2);
+  background: var(--page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  /* Dividers run to the screen edges; never let them add a sideways scroll */
+  overflow-x: clip;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
+  /* Fills laptops and large monitors, capped so lines stay readable */
+  width: min(100%, 1440px);
   margin: 0 auto;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  background: var(--surface);
+  border-inline: 1px solid var(--line);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
 p {
   margin: 0;
 }
 
-code {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-}
+/* ---- Header ---- */
 
 .app-header {
-  border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 64px;
+  padding: 0 var(--gutter);
+  background: var(--surface);
 }
 
-.app-header nav {
-  display: flex;
-  gap: 16px;
-}
-
-.app-header a {
-  color: var(--text);
+.brand {
+  justify-self: start;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
   text-decoration: none;
 }
 
-.app-header a.active {
-  color: var(--accent);
-  font-weight: 600;
+.brand span {
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.app-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.app-nav a {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.app-nav a:hover {
+  color: var(--ink);
+}
+
+.app-nav a.active {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.app-header__end {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.user-menu__name {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    grid-template-columns: auto 1fr;
+    padding: 0 16px;
+  }
+  .app-nav {
+    display: none;
+  }
+  .user-menu__name {
+    display: none;
+  }
 }
 
 .app-main {
   flex: 1;
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 20px var(--gutter);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* ---- Buttons ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--ring), var(--shadow-sm);
+  font: 500 14px/1 var(--sans);
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--hover);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn--primary {
+  background: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(31, 94, 255, 0.3);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+  box-shadow: none;
+}
+
+.btn--ghost:hover {
+  background: var(--hover);
+}
+
+.btn--lg {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 11px;
+  font-size: 15px;
+}
+
+.btn--block {
+  width: 100%;
+  height: 42px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ---- Sections ---- */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.section {
+  position: relative;
+  padding: clamp(64px, 8vw, 120px) var(--gutter);
+  text-align: center;
+}
+
+.section--intro {
+  padding: clamp(48px, 5vw, 80px) var(--gutter) clamp(40px, 4vw, 64px);
+}
+
+.section-head {
+  position: relative;
+  padding: clamp(44px, 5vw, 72px) var(--gutter) clamp(32px, 3.5vw, 52px);
+  text-align: center;
+}
+
+/* Horizontal dividers: dashed hairlines that run out past the page column
+   into the margins on both sides, fading away toward the screen edges.
+   Every section sits on one (the header and CTA carry theirs on top). */
+.app-header::after,
+.tiles::after,
+.section::after,
+.section-head::after,
+.cta::before,
+.app-footer::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  margin-left: -50vw;
+  background: var(--hline);
+  pointer-events: none;
+}
+
+.cta::after {
+  content: none;
+}
+
+.cta::before,
+.app-footer::before {
+  top: 0;
+  bottom: auto;
+}
+
+.eyebrow {
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.display {
+  margin: 0 auto;
+  max-width: 980px;
+  font-size: clamp(40px, 5.4vw, 88px);
+  line-height: 1.02;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.display--sm {
+  font-size: clamp(32px, 3.4vw, 52px);
+}
+
+.title {
+  margin: 0 auto;
+  max-width: 760px;
+  font-size: clamp(26px, 2.7vw, 44px);
+  line-height: 1.12;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 22px auto 0;
+  max-width: 620px;
+  font-size: clamp(16px, 1.3vw, 20px);
+  line-height: 1.55;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 34px;
+}
+
+.cta {
+  padding: clamp(64px, 7vw, 112px) var(--gutter);
+}
+
+.cta .hero-actions {
+  margin-top: 26px;
+}
+
+@media (max-width: 480px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 320px;
+    margin-inline: auto;
+  }
+}
+
+.role-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  font: 600 13px/24px var(--mono);
+  color: var(--accent-text);
+}
+
+/* Dashboard tiles: three equal cells split by dashed rules */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  position: relative;
+}
+
+.tile {
+  min-height: 200px;
+  margin-left: -1px;
+  padding: clamp(20px, 2.2vw, 32px);
+  border-left: 1px dashed var(--dash);
+}
+
+.tile h2 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.tile p {
+  font-size: 15px;
+}
+
+@media (max-width: 720px) {
+  .tiles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tile {
+    margin: -1px 0 0;
+    border-left: 0;
+    border-top: 1px dashed var(--dash);
+  }
+}
+
+/* ---- Forms ---- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.form-field > span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.form-field input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--ring-strong), var(--shadow-sm);
+  font: 15px/1 var(--sans);
+  color: var(--ink);
+  transition: box-shadow 0.15s ease;
+}
+
+.form-field input::placeholder {
+  color: var(--ink-3);
+}
+
+.form-field input:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1.5px var(--accent), 0 0 0 4px var(--accent-soft);
+}
+
+.form-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-hint {
+  margin-top: -8px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.form-error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--danger-soft);
+  font-size: 14px;
+  color: var(--danger);
+}
+
+.form .btn--block {
+  margin-top: 6px;
+}
+
+/* ---- Single sign-on ---- */
+
+.sso {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.sso__btn {
+  height: 44px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sso__btn svg {
+  flex: none;
+}
+
+.sso__btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 380px) {
+  .sso {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.form-error--sso {
+  margin-top: 12px;
+}
+
+/* "or sign in with email": a dashed rule with the words centred on it */
+.or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.or::before,
+.or::after {
+  content: "";
+  flex: 1;
+  border-top: 1px dashed var(--dash);
+}
+
+/* ---- Hatched band: a strip of diagonal hatching between two sections,
+   framed by solid lines that run out past the column ---- */
+.band {
+  position: relative;
+  height: clamp(28px, 3vw, 44px);
+  background: repeating-linear-gradient(-45deg, var(--hatch) 0 1px, transparent 1px 9px);
+}
+
+.band::before,
+.band::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  margin-left: -50vw;
+  background: var(--hline);
+}
+
+.band::before { top: 0; }
+.band::after { bottom: 0; }
+
+/* The band brings its own lines, so its neighbours drop theirs */
+.hero::after,
+.band + .cta::before {
+  content: none;
+}
+
+/* ---- Theme toggle ---- */
+.btn--icon {
+  width: 36px;
+  padding: 0;
 }
