@@ -18,6 +18,8 @@ export const env = {
     .filter(Boolean),
   databaseUrl: required("DATABASE_URL"),
   betterAuthSecret: required("BETTER_AUTH_SECRET"),
+  // Better Auth Dash (dashboard / infra). Optional: without it the plugin stays off.
+  betterAuthApiKey: process.env.BETTER_AUTH_API_KEY || "",
   // Single sign-on. A provider is switched on only when both its ID and secret are set.
   sso: {
     google: {

@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { genericOAuth } from "better-auth/plugins/generic-oauth";
+import { dash } from "@better-auth/infra";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma-client.js";
 import { env, isDev } from "../config/env.js";
@@ -53,6 +54,12 @@ if (enabledProviders.zoho) {
       ],
     }),
   );
+}
+
+// Better Auth Dash: the hosted dashboard for users, sessions and sign-in
+// activity. Only switched on when BETTER_AUTH_API_KEY is set.
+if (env.betterAuthApiKey) {
+  plugins.push(dash({ apiKey: env.betterAuthApiKey }));
 }
 
 export const auth = betterAuth({
