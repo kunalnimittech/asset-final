@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { authClient } from "../lib/auth-client";
-import { safeRedirect } from "../lib/safe-redirect";
-import { authErrorMessage, getSessionSafe, sessionQuery } from "../queries/session";
-import { AuthShell } from "../features/auth/AuthShell";
-import { SocialButtons } from "../features/auth/SocialButtons";
+import { authClient } from "../../lib/auth-client";
+import { safeRedirect } from "../../lib/safe-redirect";
+import { authErrorMessage, getSessionSafe, sessionQuery } from "../../queries/session";
+import { AuthShell } from "../../features/auth/AuthShell";
+import { SocialButtons } from "../../features/auth/SocialButtons";
 
 // Must match the backend (better-auth default minPasswordLength).
 const MIN_PASSWORD = 8;
 
-export const Route = createFileRoute("/signup")({
+export const Route = createFileRoute("/_site/signup")({
   validateSearch: (search) => ({ redirect: safeRedirect(search.redirect) }),
   beforeLoad: async ({ context, search }) => {
     const session = await getSessionSafe(context.queryClient);

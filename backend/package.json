@@ -5,9 +5,11 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
+    "dev": "node --watch-path=src --watch-path=generated src/server.js",
+    "build": "npm run db:generate",
+    "postinstall": "npm run db:generate",
     "create-admin": "node scripts/create-admin.js",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate && node scripts/compile-prisma-client.mjs",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio"
@@ -28,6 +30,7 @@
   },
   "devDependencies": {
     "@types/pg": "^8.23.1",
+    "esbuild": "^0.28.2",
     "prisma": "^7.10.1"
   }
 }

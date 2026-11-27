@@ -68,7 +68,9 @@ export const auth = betterAuth({
   account: {
     // Someone who signed up with email can later use Google/Microsoft/Zoho with
     // the same address and land in the same account (and vice versa).
-    accountLinking: { enabled: true, trustedProviders: ["google", "microsoft", "zoho"] },
+    // updateUserInfoOnLink: when an existing (email) account is linked to a
+    // provider, copy its profile photo and name onto the user. Email is never changed.
+    accountLinking: { enabled: true, trustedProviders: ["google", "microsoft", "zoho"], updateUserInfoOnLink: true },
   },
   user: {
     additionalFields: {

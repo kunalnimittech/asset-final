@@ -60,12 +60,26 @@ const PROVIDERS = [
  * the provider and back to /api/auth/callback/<id>, then on to `redirectTo`.
  */
 export function SocialButtons({ redirectTo, onError }) {
-  const { data: enabled, isError } = useQuery(providersQuery());
+  const { data: enabled, isError, refetch } = useQuery(providersQuery());
   const [pending, setPending] = useState(null);
 
-  const start = async (provider) => {
-    setPending(provider);
+  // Buttons are always clickable. If a provider has no credentials in
+  // backend/.env yet, the click explains that instead of failing silently.
+  const start = async (provider, name) => {
     onError?.(null);
+    let config = enabled;
+    if (!config) config = (await refetch()).data;
+    if (!config) {
+      onError?.("Can't reach the server. Make sure the backend is running and try again.");
+      return;
+    }
+    if (!config[provider]) {
+      const key = provider.toUpperCase();
+      onError?.(`${name} sign-in isn't set up yet. Add ${key}_CLIENT_ID and ${key}_CLIENT_SECRET to backend/.env and restart the backend.`);
+      return;
+    }
+
+    setPending(provider);
     const origin = window.location.origin;
     const { error } = await authClient.signIn.social({
       provider,
@@ -82,15 +96,14 @@ export function SocialButtons({ redirectTo, onError }) {
   return (
     <div className="sso">
       {PROVIDERS.map(({ id, name, Mark }) => {
-        const ready = Boolean(enabled?.[id]);
         return (
           <button
             key={id}
             type="button"
             className="btn sso__btn"
-            onClick={() => start(id)}
-            disabled={!ready || pending !== null}
-            title={ready ? `Continue with ${name}` : isError ? "Server unreachable" : `${name} sign-in isn't configured yet`}
+            onClick={() => start(id, name)}
+            disabled={pending !== null}
+            title={isError ? "Server unreachable" : `Continue with ${name}`}
             aria-label={`Continue with ${name}`}
           >
             <Mark />

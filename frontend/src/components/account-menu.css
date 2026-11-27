@@ -1,0 +1,154 @@
+/* Account menu: a trigger and a popover of links, ending in Sign out */
+.acct {
+  position: relative;
+}
+
+.acct__trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.acct__trigger:hover,
+.acct__trigger[data-open] {
+  background: var(--hover);
+}
+
+.acct__trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Sidebar card: name and email beside the avatar */
+.acct[data-variant="card"] .acct__trigger {
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.acct__who {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.acct__name,
+.acct__email {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.acct__name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.acct__email {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.acct__chev {
+  flex: none;
+  color: var(--ink-3);
+}
+
+/* The popover */
+.acct__menu {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 240px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--raised);
+  box-shadow: 0 0 0 1px var(--ring), var(--shadow-lg);
+  animation: acct-in 0.14s ease-out;
+}
+
+/* In the sidebar it opens upward, the full width of the card */
+.acct[data-variant="card"] .acct__menu {
+  top: auto;
+  bottom: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  width: auto;
+}
+
+@keyframes acct-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.acct__head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px 10px;
+}
+
+.acct__sep {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--line);
+}
+
+.acct__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: 500 13.5px/1 var(--sans);
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.acct__item svg {
+  flex: none;
+  color: var(--ink-2);
+}
+
+.acct__item:hover,
+.acct__item:focus-visible {
+  outline: none;
+  background: var(--hover);
+}
+
+.acct__item--danger,
+.acct__item--danger svg {
+  color: var(--danger);
+}
+
+.acct__error {
+  padding: 6px 10px;
+  font-size: 12.5px;
+  color: var(--danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acct__menu {
+    animation: none;
+  }
+}

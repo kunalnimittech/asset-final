@@ -6,6 +6,10 @@
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
+  // The generated files are TypeScript; scripts/compile-prisma-client.mjs turns
+  // them into plain .js next to them, so imports must point at ".js". This keeps
+  // the backend runnable by plain Node anywhere (locally and on Vercel).
+  importFileExtension = "js"
 }
 
 datasource db {

@@ -1,0 +1,22 @@
+/* A round profile picture, or a default user icon on a neutral disc */
+.user-avatar {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--wash);
+  box-shadow: inset 0 0 0 1px var(--ring);
+  color: var(--ink-2);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A photo brings its own edge; keep only a faint ring so it reads on white and black */
+.user-avatar[data-photo] {
+  background: var(--hover);
+}

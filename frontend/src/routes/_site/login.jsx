@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { authClient } from "../lib/auth-client";
-import { safeRedirect } from "../lib/safe-redirect";
-import { authErrorMessage, getSessionSafe, sessionQuery } from "../queries/session";
-import { AuthShell } from "../features/auth/AuthShell";
-import { SocialButtons } from "../features/auth/SocialButtons";
-import { ssoErrorMessage } from "../features/auth/sso-errors";
+import { authClient } from "../../lib/auth-client";
+import { safeRedirect } from "../../lib/safe-redirect";
+import { authErrorMessage, getSessionSafe, sessionQuery } from "../../queries/session";
+import { AuthShell } from "../../features/auth/AuthShell";
+import { SocialButtons } from "../../features/auth/SocialButtons";
+import { ssoErrorMessage } from "../../features/auth/sso-errors";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/_site/login")({
   validateSearch: (search) => ({
     redirect: safeRedirect(search.redirect),
     // Set by better-auth when a Google / Microsoft / Zoho sign-in fails.

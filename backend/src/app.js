@@ -9,6 +9,9 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
+// Behind Vercel's (or any) proxy: trust X-Forwarded-* for protocol and client IP.
+app.set("trust proxy", true);
+
 // credentials: true so the browser sends/receives the auth session cookie.
 const LOCALHOST = /^http:\/\/(localhost|127\.0\.0\.1):\d+$/;
 app.use(cors({ origin: isDev ? [...env.corsOrigins, LOCALHOST] : env.corsOrigins, credentials: true }));

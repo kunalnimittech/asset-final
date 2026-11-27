@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { sessionQuery } from "../queries/session";
-import { FeatureGrid } from "../features/bento/FeatureGrid";
+import { sessionQuery } from "../../queries/session";
+import { FeatureGrid } from "../../features/bento/FeatureGrid";
 
 // Public landing page. Signed-in users get a shortcut to the dashboard.
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_site/")({
   component: HomePage,
 });
 
