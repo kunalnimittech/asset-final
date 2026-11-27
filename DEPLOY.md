@@ -7,11 +7,11 @@ Two Vercel projects from this one repository:
 | `nimittech-assets-api` | `backend` | Express + better-auth + Prisma, one Vercel Function (Vercel detects Express from `src/app.js`) |
 | `nimittech-assets` | `frontend` | The Vite single-page app (static files) |
 
-The browser only ever talks to the **frontend** domain. `frontend/vercel.json` forwards every `/api/*` request to the backend, the same way the Vite dev proxy does locally. That keeps the login cookie first-party on the frontend domain, so sign-in works in every browser without cross-site cookie settings.
+The browser only ever talks to the **frontend** domain. Every `/api/*` request there goes to a small Vercel Function (`frontend/api/proxy.js`), which forwards it to the backend named by the `BACKEND_URL` environment variable, the same way the Vite dev proxy does locally. That keeps the login cookie first-party on the frontend domain, so sign-in works in every browser without cross-site cookie settings.
 
 ```
 browser ──► https://nimittech-assets.vercel.app            (static app)
-        └─► https://nimittech-assets.vercel.app/api/...    ──rewrite──►  https://nimittech-assets-api.vercel.app/api/...
+        └─► https://nimittech-assets.vercel.app/api/...    ──api/proxy.js──►  ${BACKEND_URL}/api/...
 ```
 
 ## 1. Database
@@ -50,10 +50,12 @@ How the build works: `npm install` runs `postinstall` → `prisma generate` and 
 
 ## 3. Frontend project
 
-1. In `frontend/vercel.json`, replace `https://YOUR-BACKEND.vercel.app` with the backend's production URL, and commit.
-2. Vercel → **Add New… → Project** → import the same repo.
-3. **Root Directory:** `frontend`. Framework Preset: **Vite**. No environment variables needed.
-4. Deploy.
+1. Vercel → **Add New… → Project** → import the same repo.
+2. **Root Directory:** `frontend`. Framework Preset: **Vite**.
+3. **Environment Variables:** `BACKEND_URL` = the backend's URL, e.g. `https://asset-backend-xi.vercel.app` (no trailing slash).
+4. Deploy. `https://<frontend>/api/health` should return `{"status":"ok",...}`.
+
+Locally the same variable lives in `frontend/.env` (copy `frontend/.env.example`); the Vite dev proxy reads it.
 
 ## 4. Single sign-on redirect URLs
 

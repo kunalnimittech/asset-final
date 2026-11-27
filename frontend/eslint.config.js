@@ -21,6 +21,11 @@ export default defineConfig([
     },
   },
   {
+    // Server-side code (Vercel Function, Vite config) runs in Node.
+    files: ['api/**/*.js', 'vite.config.js'],
+    languageOptions: { globals: globals.node },
+  },
+  {
     // Route files export `Route` alongside components; that's expected.
     files: ['src/routes/**/*.{js,jsx}'],
     rules: { 'react-refresh/only-export-components': 'off' },
