@@ -576,15 +576,50 @@ p {
   background: var(--danger-soft);
 }
 
-@media (max-width: 420px) {
+/* ---- Phone header: actions fold into a menu button ---- */
+.app-header__burger,
+.site-menu {
+  display: none;
+}
+
+@media (max-width: 640px) {
   .app-header {
-    padding: 0 14px;
+    padding: 0 16px;
   }
-  .app-header .btn {
-    padding: 0 10px;
-  }
-  .brand span {
+  .app-header__wide {
     display: none;
+  }
+  .app-header__burger {
+    display: inline-flex;
+  }
+  .site-menu {
+    position: absolute;
+    z-index: 5;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    transform: translateY(-6px);
+    visibility: hidden;
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s 0.18s;
+  }
+  .site-menu[data-open] {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-menu {
+    transition: none !important;
   }
 }
 
