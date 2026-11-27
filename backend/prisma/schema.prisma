@@ -4,8 +4,8 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider            = "prisma-client"
+  output              = "../generated/prisma"
   // The generated files are TypeScript; scripts/compile-prisma-client.mjs turns
   // them into plain .js next to them, so imports must point at ".js". This keeps
   // the backend runnable by plain Node anywhere (locally and on Vercel).
@@ -22,14 +22,35 @@ model User {
   email         String
   emailVerified Boolean   @default(false)
   image         String?
-  role          String    @default("user")
+  // One role per user (RBAC). Holds the role's key, e.g. "employee", and
+  // points at ROLE.key. Kept as a string so better-auth can read it directly.
+  role          String    @default("employee")
+  roleRef       Role      @relation(fields: [role], references: [key], onUpdate: Cascade)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
 
   @@unique([email])
+  @@index([role])
   @@map("user")
+}
+
+// ROLE (Eraser schema): the six roles of Asset Management 2.0, and any added later.
+// Permission-based access (PERMISSION, ROLE_PERMISSION) is a later layer on top.
+model Role {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique // stable code used in checks: admin, employee, procurer, technician, asset_manager, vendor
+  name        String   @unique // shown in the app: Admin, Employee, ...
+  description String?
+  dashboard   String? // which dashboard this role lands on
+  isSystem    Boolean  @default(false) // built-in roles can't be deleted
+  status      String   @default("Active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+
+  @@map("role")
 }
 
 model Session {

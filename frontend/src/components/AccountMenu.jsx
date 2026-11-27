@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { ChevronsUpDown, LayoutDashboard, LogOut, Settings, UserRound } from "lucide-react";
 import { UserAvatar } from "./UserAvatar";
 import { useSignOut } from "../lib/use-sign-out";
+import { roleLabel } from "../lib/access";
 import "./account-menu.css";
 
 const ICON = { size: 16, strokeWidth: 1.75 };
@@ -61,6 +62,7 @@ export function AccountMenu({ user, variant = "avatar", showDashboard = false })
           <div className="acct__head">
             <span className="acct__name">{user.name}</span>
             <span className="acct__email">{user.email}</span>
+            {user.role && <span className="access-chip acct__role">{roleLabel(user.role)}</span>}
           </div>
           <div className="acct__sep" />
           {showDashboard && (

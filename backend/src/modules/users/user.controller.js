@@ -10,7 +10,7 @@ export const getOne = async (req, res) => res.json(await userService.getById(req
 
 export const create = async (req, res) => res.status(201).json(await userService.create(req.body));
 
-export const update = async (req, res) => res.json(await userService.update(req.params.id, req.body));
+export const update = async (req, res) => res.json(await userService.update(req.params.id, req.body, req.user.id));
 
 export const remove = async (req, res) => {
   await userService.remove(req.params.id, req.user.id);

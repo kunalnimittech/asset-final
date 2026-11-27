@@ -4,7 +4,7 @@ import { dash } from "@better-auth/infra";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma-client.js";
 import { env, isDev } from "../config/env.js";
-import { ROLES } from "../constants/roles.js";
+import { DEFAULT_ROLE } from "../constants/roles.js";
 
 const { google, microsoft, zoho } = env.sso;
 const configured = (p) => Boolean(p.clientId && p.clientSecret);
@@ -82,7 +82,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       // input: false -> users can't pick their own role at sign-up.
-      role: { type: "string", required: false, defaultValue: ROLES.USER, input: false },
+      role: { type: "string", required: false, defaultValue: DEFAULT_ROLE, input: false },
     },
   },
 });

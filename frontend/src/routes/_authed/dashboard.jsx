@@ -3,8 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarClock, History, Package, UserCheck, Wrench } from "lucide-react";
 import { UserAvatar } from "../../components/UserAvatar";
 import { sessionQuery } from "../../queries/session";
+import { guard } from "../../lib/guard";
+import { roleLabel } from "../../lib/access";
 
 export const Route = createFileRoute("/_authed/dashboard")({
+  beforeLoad: guard("dashboard"),
   component: DashboardPage,
 });
 
@@ -72,7 +75,7 @@ function DashboardPage() {
               </div>
             </div>
             <p style={{ marginTop: 14, fontSize: 14 }}>
-              Role <span className="role-chip">{user.role}</span>
+              Role <span className="role-chip">{roleLabel(user.role)}</span>
             </p>
             <div className="me__links">
               <Link to="/profile" className="btn">

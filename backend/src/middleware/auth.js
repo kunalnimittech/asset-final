@@ -11,7 +11,8 @@ export async function requireAuth(req, _res, next) {
   next();
 }
 
-// Use after requireAuth: requireRole("admin"), requireRole("admin", "manager")
+// Use after requireAuth: requireRole(ROLES.ADMIN), requireRole(ROLES.ADMIN, ROLES.PROCURER).
+// Every module route must use it: the frontend hiding a menu item is not security.
 export const requireRole = (...roles) => (req, _res, next) => {
   if (!roles.includes(req.user?.role)) throw ApiError.forbidden();
   next();

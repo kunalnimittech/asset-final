@@ -11,9 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as SiteRouteImport } from './routes/_site'
+import { Route as AuthedApprovalsRouteImport } from './routes/_authed/approvals'
+import { Route as AuthedAssetsRouteImport } from './routes/_authed/assets'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
+import { Route as AuthedInventoryRouteImport } from './routes/_authed/inventory'
+import { Route as AuthedMaintenanceRouteImport } from './routes/_authed/maintenance'
+import { Route as AuthedPreferencesRouteImport } from './routes/_authed/preferences'
+import { Route as AuthedProcurementsRouteImport } from './routes/_authed/procurements'
 import { Route as AuthedProfileRouteImport } from './routes/_authed/profile'
+import { Route as AuthedRequestsRouteImport } from './routes/_authed/requests'
 import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
+import { Route as AuthedSetupRouteImport } from './routes/_authed/setup'
+import { Route as AuthedWorkOrdersRouteImport } from './routes/_authed/work-orders'
 import { Route as SiteIndexRouteImport } from './routes/_site/index'
 import { Route as SiteHomeRouteImport } from './routes/_site/home'
 import { Route as SiteLoginRouteImport } from './routes/_site/login'
@@ -27,9 +36,39 @@ const SiteRoute = SiteRouteImport.update({
   id: '/_site',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthedApprovalsRoute = AuthedApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedAssetsRoute = AuthedAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedInventoryRoute = AuthedInventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedMaintenanceRoute = AuthedMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedPreferencesRoute = AuthedPreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedProcurementsRoute = AuthedProcurementsRouteImport.update({
+  id: '/procurements',
+  path: '/procurements',
   getParentRoute: () => AuthedRoute,
 } as any)
 const AuthedProfileRoute = AuthedProfileRouteImport.update({
@@ -37,9 +76,24 @@ const AuthedProfileRoute = AuthedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedRequestsRoute = AuthedRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const AuthedSettingsRoute = AuthedSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedSetupRoute = AuthedSetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedWorkOrdersRoute = AuthedWorkOrdersRouteImport.update({
+  id: '/work-orders',
+  path: '/work-orders',
   getParentRoute: () => AuthedRoute,
 } as any)
 const SiteIndexRoute = SiteIndexRouteImport.update({
@@ -65,18 +119,36 @@ const SiteSignupRoute = SiteSignupRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof SiteIndexRoute
+  '/approvals': typeof AuthedApprovalsRoute
+  '/assets': typeof AuthedAssetsRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/inventory': typeof AuthedInventoryRoute
+  '/maintenance': typeof AuthedMaintenanceRoute
+  '/preferences': typeof AuthedPreferencesRoute
+  '/procurements': typeof AuthedProcurementsRoute
   '/profile': typeof AuthedProfileRoute
+  '/requests': typeof AuthedRequestsRoute
   '/settings': typeof AuthedSettingsRoute
+  '/setup': typeof AuthedSetupRoute
+  '/work-orders': typeof AuthedWorkOrdersRoute
   '/home': typeof SiteHomeRoute
   '/login': typeof SiteLoginRoute
   '/signup': typeof SiteSignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof SiteIndexRoute
+  '/approvals': typeof AuthedApprovalsRoute
+  '/assets': typeof AuthedAssetsRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/inventory': typeof AuthedInventoryRoute
+  '/maintenance': typeof AuthedMaintenanceRoute
+  '/preferences': typeof AuthedPreferencesRoute
+  '/procurements': typeof AuthedProcurementsRoute
   '/profile': typeof AuthedProfileRoute
+  '/requests': typeof AuthedRequestsRoute
   '/settings': typeof AuthedSettingsRoute
+  '/setup': typeof AuthedSetupRoute
+  '/work-orders': typeof AuthedWorkOrdersRoute
   '/home': typeof SiteHomeRoute
   '/login': typeof SiteLoginRoute
   '/signup': typeof SiteSignupRoute
@@ -85,9 +157,18 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authed': typeof AuthedRouteWithChildren
   '/_site': typeof SiteRouteWithChildren
+  '/_authed/approvals': typeof AuthedApprovalsRoute
+  '/_authed/assets': typeof AuthedAssetsRoute
   '/_authed/dashboard': typeof AuthedDashboardRoute
+  '/_authed/inventory': typeof AuthedInventoryRoute
+  '/_authed/maintenance': typeof AuthedMaintenanceRoute
+  '/_authed/preferences': typeof AuthedPreferencesRoute
+  '/_authed/procurements': typeof AuthedProcurementsRoute
   '/_authed/profile': typeof AuthedProfileRoute
+  '/_authed/requests': typeof AuthedRequestsRoute
   '/_authed/settings': typeof AuthedSettingsRoute
+  '/_authed/setup': typeof AuthedSetupRoute
+  '/_authed/work-orders': typeof AuthedWorkOrdersRoute
   '/_site/home': typeof SiteHomeRoute
   '/_site/login': typeof SiteLoginRoute
   '/_site/signup': typeof SiteSignupRoute
@@ -97,18 +178,36 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/approvals'
+    | '/assets'
     | '/dashboard'
+    | '/inventory'
+    | '/maintenance'
+    | '/preferences'
+    | '/procurements'
     | '/profile'
+    | '/requests'
     | '/settings'
+    | '/setup'
+    | '/work-orders'
     | '/home'
     | '/login'
     | '/signup'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/approvals'
+    | '/assets'
     | '/dashboard'
+    | '/inventory'
+    | '/maintenance'
+    | '/preferences'
+    | '/procurements'
     | '/profile'
+    | '/requests'
     | '/settings'
+    | '/setup'
+    | '/work-orders'
     | '/home'
     | '/login'
     | '/signup'
@@ -116,9 +215,18 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authed'
     | '/_site'
+    | '/_authed/approvals'
+    | '/_authed/assets'
     | '/_authed/dashboard'
+    | '/_authed/inventory'
+    | '/_authed/maintenance'
+    | '/_authed/preferences'
+    | '/_authed/procurements'
     | '/_authed/profile'
+    | '/_authed/requests'
     | '/_authed/settings'
+    | '/_authed/setup'
+    | '/_authed/work-orders'
     | '/_site/home'
     | '/_site/login'
     | '/_site/signup'
@@ -146,11 +254,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/approvals': {
+      id: '/_authed/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof AuthedApprovalsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/assets': {
+      id: '/_authed/assets'
+      path: '/assets'
+      fullPath: '/assets'
+      preLoaderRoute: typeof AuthedAssetsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/dashboard': {
       id: '/_authed/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthedDashboardRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/inventory': {
+      id: '/_authed/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof AuthedInventoryRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/maintenance': {
+      id: '/_authed/maintenance'
+      path: '/maintenance'
+      fullPath: '/maintenance'
+      preLoaderRoute: typeof AuthedMaintenanceRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/preferences': {
+      id: '/_authed/preferences'
+      path: '/preferences'
+      fullPath: '/preferences'
+      preLoaderRoute: typeof AuthedPreferencesRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/procurements': {
+      id: '/_authed/procurements'
+      path: '/procurements'
+      fullPath: '/procurements'
+      preLoaderRoute: typeof AuthedProcurementsRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/profile': {
@@ -160,11 +310,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedProfileRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/requests': {
+      id: '/_authed/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof AuthedRequestsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/settings': {
       id: '/_authed/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AuthedSettingsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/setup': {
+      id: '/_authed/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof AuthedSetupRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/work-orders': {
+      id: '/_authed/work-orders'
+      path: '/work-orders'
+      fullPath: '/work-orders'
+      preLoaderRoute: typeof AuthedWorkOrdersRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_site/': {
@@ -199,15 +370,33 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthedRouteChildren {
+  AuthedApprovalsRoute: typeof AuthedApprovalsRoute
+  AuthedAssetsRoute: typeof AuthedAssetsRoute
   AuthedDashboardRoute: typeof AuthedDashboardRoute
+  AuthedInventoryRoute: typeof AuthedInventoryRoute
+  AuthedMaintenanceRoute: typeof AuthedMaintenanceRoute
+  AuthedPreferencesRoute: typeof AuthedPreferencesRoute
+  AuthedProcurementsRoute: typeof AuthedProcurementsRoute
   AuthedProfileRoute: typeof AuthedProfileRoute
+  AuthedRequestsRoute: typeof AuthedRequestsRoute
   AuthedSettingsRoute: typeof AuthedSettingsRoute
+  AuthedSetupRoute: typeof AuthedSetupRoute
+  AuthedWorkOrdersRoute: typeof AuthedWorkOrdersRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedApprovalsRoute: AuthedApprovalsRoute,
+  AuthedAssetsRoute: AuthedAssetsRoute,
   AuthedDashboardRoute: AuthedDashboardRoute,
+  AuthedInventoryRoute: AuthedInventoryRoute,
+  AuthedMaintenanceRoute: AuthedMaintenanceRoute,
+  AuthedPreferencesRoute: AuthedPreferencesRoute,
+  AuthedProcurementsRoute: AuthedProcurementsRoute,
   AuthedProfileRoute: AuthedProfileRoute,
+  AuthedRequestsRoute: AuthedRequestsRoute,
   AuthedSettingsRoute: AuthedSettingsRoute,
+  AuthedSetupRoute: AuthedSetupRoute,
+  AuthedWorkOrdersRoute: AuthedWorkOrdersRoute,
 }
 
 const AuthedRouteWithChildren =

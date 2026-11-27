@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UserAvatar } from "../../components/UserAvatar";
 import { authClient } from "../../lib/auth-client";
 import { authErrorMessage, sessionQuery } from "../../queries/session";
+import { roleLabel } from "../../lib/access";
 
 export const Route = createFileRoute("/_authed/profile")({
   component: ProfilePage,
@@ -76,7 +77,7 @@ function ProfilePage() {
             <div className="form-field">
               <span>Role</span>
               <div className="field-static">
-                <span className="role-chip">{user.role}</span>
+                <span className="role-chip">{roleLabel(user.role)}</span>
               </div>
             </div>
           </div>

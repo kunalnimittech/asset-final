@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { prisma } from "../../lib/prisma-client.js";
 import { auth } from "../../lib/auth.js";
 import { ApiError } from "../../utils/ApiError.js";
-import { ALL_ROLES, ROLES } from "../../constants/roles.js";
+import { ALL_ROLES, DEFAULT_ROLE } from "../../constants/roles.js";
 
 // Never return session/account rows (they hold tokens and password hashes).
 const publicFields = {
@@ -56,16 +56,20 @@ export async function create(data = {}) {
       id,
       name: data.name.trim(),
       email,
-      role: data.role ?? ROLES.USER,
+      role: data.role ?? DEFAULT_ROLE,
       accounts: { create: { id: randomUUID(), accountId: id, providerId: "credential", password: hash } },
     },
     select: publicFields,
   });
 }
 
-export async function update(id, data = {}) {
-  await getById(id);
+export async function update(id, data = {}, currentUserId) {
+  const current = await getById(id);
   validate(data, { partial: true });
+  // An admin can't take away their own admin role (it would lock them out).
+  if (id === currentUserId && data.role !== undefined && data.role !== current.role) {
+    throw ApiError.badRequest("You can't change your own role");
+  }
   const email = data.email?.toLowerCase();
   if (email) await assertEmailFree(email, id);
 

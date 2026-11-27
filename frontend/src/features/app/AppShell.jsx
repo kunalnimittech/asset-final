@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, Outlet, useRouteContext, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { LayoutDashboard, Menu, Settings, UserRound, X } from "lucide-react";
+import { Menu, Settings, UserRound, X } from "lucide-react";
+import { MODULES, modulesFor, roleLabel } from "../../lib/access";
 import { sessionQuery } from "../../queries/session";
 import { AccountMenu } from "../../components/AccountMenu";
 import { ThemeToggle } from "../../components/ThemeToggle";
@@ -9,21 +10,16 @@ import "./app-shell.css";
 
 const ICON = { size: 16, strokeWidth: 1.75 };
 
-const NAV = [
-  {
-    label: "Workspace",
-    items: [{ to: "/dashboard", label: "Dashboard", Icon: LayoutDashboard }],
-  },
-  {
-    label: "Account",
-    items: [
-      { to: "/profile", label: "Profile", Icon: UserRound },
-      { to: "/settings", label: "Settings", Icon: Settings },
-    ],
-  },
+const ACCOUNT_NAV = [
+  { to: "/profile", label: "Profile", Icon: UserRound },
+  { to: "/settings", label: "Settings", Icon: Settings },
 ];
 
-const TITLES = { "/dashboard": "Dashboard", "/profile": "Profile", "/settings": "Settings" };
+const TITLES = {
+  ...Object.fromEntries(MODULES.map((m) => [m.path, m.label])),
+  "/profile": "Profile",
+  "/settings": "Settings",
+};
 
 /** The signed-in app: a sidebar of sections, a top bar, and the page. */
 export function AppShell() {
@@ -31,6 +27,12 @@ export function AppShell() {
   // Prefer the live session so a renamed user shows up at once.
   const { data: session } = useQuery(sessionQuery());
   const user = session?.user ?? context.user;
+
+  // The menu is built from the user's role (RBAC, see lib/access.js).
+  const nav = [
+    { label: roleLabel(user.role), items: modulesFor(user.role).map((m) => ({ to: m.path, label: m.label, Icon: m.Icon })) },
+    { label: "Account", items: ACCOUNT_NAV },
+  ];
 
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   // The phone drawer remembers the page it was opened on, so moving to
@@ -52,7 +54,7 @@ export function AppShell() {
         </div>
 
         <nav className="app-nav-list">
-          {NAV.map((group) => (
+          {nav.map((group) => (
             <div key={group.label} className="app-nav-group">
               <p className="app-nav-group__label">{group.label}</p>
               {group.items.map(({ to, label, Icon }) => (
