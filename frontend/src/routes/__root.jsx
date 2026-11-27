@@ -20,7 +20,7 @@ function RootLayout() {
       <main className="app-main">
         <Outlet />
       </main>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
       <TanStackRouterDevtools position="bottom-right" />
     </>
   );

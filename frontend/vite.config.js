@@ -11,4 +11,10 @@ export default defineConfig({
     }),
     react(),
   ],
+  server: {
+    // In dev, /api/* is forwarded to the Express backend (no CORS needed).
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
+  },
 });
